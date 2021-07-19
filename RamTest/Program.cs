@@ -1,44 +1,31 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
 
 namespace RamTest
 {
-    class Program
+    internal class Program
     {
-        
-        static Process[] process;
-        static void Main(string[] args)
+        private static Process[] _process;
+
+        private static void Main()
         {
             Timer timer = new Timer(3000);
-            timer.Elapsed += yaz;
+            timer.Elapsed += Yaz;
             timer.Start();
             Console.ReadKey();
         }
 
-        static private void yaz(object sender, ElapsedEventArgs elapsedEventArgs)
+        private static void Yaz(object sender, ElapsedEventArgs elapsedEventArgs)
         {
             List<string> processModules = new List<string>();
             processModules.Clear();
             try
             {
-                process = Process.GetProcessesByName("fivem");
-                Console.WriteLine(process[0].ProcessName);
-            }
-            catch 
-            {
-                Console.WriteLine("Uygulama açık değil.");
-                return;
-            }
-            try
-            {
-                foreach (Process proces in process)
+                _process = Process.GetProcessesByName("discord");
+                foreach (Process proces in _process)
                 {
                     foreach (ProcessModule module in proces.Modules)
                     {
@@ -47,14 +34,13 @@ namespace RamTest
                         processModules.Add(module.ModuleName);
                     }
                 }
-                
-                Console.WriteLine(processModules.Count);
-                Console.WriteLine(GetSequenceHashCode(processModules));
-                
+
+                Console.WriteLine($"Proses: {_process[0].ProcessName}\tModul Sayısı: {processModules.Count}\tHash: {GetSequenceHashCode(processModules)}");
+                Console.WriteLine("--------------------------------------------------------------------");
             }
             catch 
             {
-                Console.WriteLine("Hata!");
+                Console.WriteLine("Uygulama açık değil.");
             }
             
            
